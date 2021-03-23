@@ -1,4 +1,5 @@
 #include <limits.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -25,8 +26,23 @@ int main(int argc) {
     *create_command = *strcat(create_command, " ");
     *create_command = *strcat(create_command, dest);
         
-    int rm_status = system(delete_command);
-    int ln_status = system(create_command);
+    // Check if link already exists; then delete
+    if (!access(dest, F_OK)) {
+        int rm_status = system(delete_command);
+    }
 
-    return ln_status;
+    // Check if link really does not exist; then create new link
+    if (access(dest, F_OK)) {
+        int ln_status = system(create_command);
+
+        if (!ln_status) {
+            printf("Link created \033[0;36m%s", dest);
+            printf(" \033[0m->");
+            printf(" \033[0;34m%s\033[0m\n", src);
+        }
+
+        return ln_status;
+    }
+
+    return 1;
 }
