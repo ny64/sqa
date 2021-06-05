@@ -33,7 +33,7 @@ int main(int argc) {
 
     // Check if link really does not exist; then create new link
     if (access(dest, F_OK)) {
-        int ln_status = system(create_command);
+        int ln_status = system(create_command); // ln -s [src] [dest]
 
         if (!ln_status) {
             printf("Link created \033[0;36m%s", dest);
